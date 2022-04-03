@@ -1,4 +1,7 @@
-import grid
+import game
 
-g = grid.Grid()
-g.display()
+game = game.Game()
+
+game.run()
+
+
