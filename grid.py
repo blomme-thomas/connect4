@@ -1,4 +1,3 @@
-from pygame import init
 import numpy as np
 
 class Grid:
