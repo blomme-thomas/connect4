@@ -1,2 +1,4 @@
-x = 2
-print(x)
+import grid
+
+g = grid.Grid()
+g.display()
