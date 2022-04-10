@@ -7,55 +7,24 @@ class Game:
         
     def run(self):
         while(1):
-            while(1):
-                player1 = input()
-                if (int(player1)>6 or int(player1)<0):
-                    print("coup impossible")
-                    continue
-                if (player1 == "q"):
-                    break
-                i = 5
-                while(self.grid.values[i,int(player1)] != 0 and i>=0):
-                    i -= 1
-                if (i<0):
-                    print("coup impossible")
-                else:
-                    break
-            self.grid.values[i,int(player1)] = 1
-
+            c = input()
+            self.place_coin(c,1)
             if (self.check_state() == 1):
                 print("player 1 win")
                 self.grid.display()
                 break
-            
-            self.grid.display()
 
-            while(1):
-                player2 = input()
-                if (int(player2)>6 or int(player2)<0):
-                    print("coup impossible")
-                    continue
-                if (player2 == "q"):
-                    break
-                i = 5
-                while(self.grid.values[i,int(player2)] != 0 and i>=0):
-                    i -= 1
-                if (i<0):
-                    print("coup impossible")
-                else:
-                    break
-            self.grid.values[i,int(player2)] = 2
-
+            c = input()
+            self.place_coin(c,2)
             if (self.check_state() == 2):
                 print("player 2 win")
                 self.grid.display()
                 break
 
             if (self.check_state() == 0):
-                print("egality")
+                print("Draw")
                 self.grid.display()
                 break
-        
 
             self.grid.display()
             
@@ -98,3 +67,26 @@ class Game:
                             self.state = 2
                             break
         return self.state
+
+    def place_coin(self,column,player):
+        while(1):
+            
+            if (int(column)>6 or int(column)<0):
+                print("coup impossible")
+                continue
+            if (column == "q"):
+                break
+            i = 5
+            while(self.grid.values[i,int(column)] != 0 and i>=0):
+                i -= 1
+            if (i<0):
+                print("coup impossible")
+            else:
+                break
+
+        if (player == 1):
+            self.grid.values[i,int(column)] = 1
+        elif (player == 2):
+            self.grid.values[i,int(column)] = 2           
+
+
