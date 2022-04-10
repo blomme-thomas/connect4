@@ -6,3 +6,4 @@ class Grid:
 
     def display(self):
         print(self.values)
+

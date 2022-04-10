@@ -1,32 +1,43 @@
 import grid
+import ia
+import numpy as np
+import qlearning
+import random
 
 class Game:
+    
     def __init__(self):
         self.grid = grid.Grid()
         self.state = 0        
-        
+        self.q = np.loadtxt("matrix.txt")
+
     def run(self):
         while(1):
-            c = input()
-            self.place_coin(c,1)
+            ia1 = ia.jouer(self, 1, self.q)
+            qlearning.update_case(0.1,0.6,self.q,ia1[0],ia1[1])
+            
             if (self.check_state() == 1):
+                qlearning.update_case(1,0.6,self.q,ia1[0],ia1[1])
                 print("player 1 win")
-                self.grid.display()
+                np.savetxt("matrix.txt", self.q)
                 break
 
-            c = input()
-            self.place_coin(c,2)
+            c = self.coup_possible()
+            print(c)
+            self.place_coin(random.choice(c),2)
+            
             if (self.check_state() == 2):
                 print("player 2 win")
-                self.grid.display()
+                np.savetxt("matrix.txt", self.q)
                 break
 
             if (self.check_state() == 0):
                 print("Draw")
-                self.grid.display()
+                np.savetxt("matrix.txt", self.q)
                 break
 
-            self.grid.display()
+            np.savetxt("matrix.txt", self.q)
+            
             
             
 
@@ -70,7 +81,7 @@ class Game:
 
     def place_coin(self,column,player):
         while(1):
-            
+            print(player)
             if (int(column)>6 or int(column)<0):
                 print("coup impossible")
                 continue
@@ -90,3 +101,12 @@ class Game:
             self.grid.values[i,int(column)] = 2           
 
 
+    def coup_possible(self):
+        c = []
+        for j in range(7):
+            i = 5
+            while self.grid.values[i, j] != 0 and i!=-1:
+                i-=1
+            if i != -1:
+                c.append(j)
+        return c
