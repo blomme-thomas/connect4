@@ -10,8 +10,11 @@ class Game:
         self.grid = grid.Grid()
         self.state = 0        
         self.q = np.loadtxt("matrix.txt")
+        #stats : nb_games | wins | winligne | wincolonne | windiagonale
+        self.stats = np.loadtxt("stats.txt")
 
     def run(self):
+        self.stats[0] += 1
         while(1):
             ia1 = ia.jouer(self, 1, self.q)
             qlearning.update_case(0.1,0.6,self.q,ia1[0],ia1[1])
@@ -19,6 +22,7 @@ class Game:
             if (self.check_state() == 1):
                 qlearning.update_case(1,0.6,self.q,ia1[0],ia1[1])
                 print("player 1 win")
+                self.stats[1] += 1
                 np.savetxt("matrix.txt", self.q)
                 break
 
@@ -37,6 +41,8 @@ class Game:
                 break
 
             np.savetxt("matrix.txt", self.q)
+        np.savetxt("stats.txt",self.stats)
+
             
             
             
@@ -51,6 +57,7 @@ class Game:
                 if (i>2):
                     if (self.grid.values[i,j] == self.grid.values[i-1,j] == self.grid.values[i-2,j] == self.grid.values[i-3,j] == 1):
                         self.state = 1
+                        self.stats[2] += 1
                         break
                     if (self.grid.values[i,j] == self.grid.values[i-1,j] == self.grid.values[i-2,j] == self.grid.values[i-3,j] == 2):
                         self.state = 2
@@ -58,6 +65,7 @@ class Game:
                 if (j<4):
                     if (self.grid.values[i,j] == self.grid.values[i,j+1] == self.grid.values[i,j+2] == self.grid.values[i,j+3] == 1):
                         self.state = 1
+                        self.stats[3] += 1
                         break
                     if (self.grid.values[i,j] == self.grid.values[i,j+1] == self.grid.values[i,j+2] == self.grid.values[i,j+3] == 2):
                         self.state = 2  
@@ -66,6 +74,7 @@ class Game:
                     if (j<=3):
                         if (self.grid.values[i,j] == self.grid.values[i-1,j+1] == self.grid.values[i-2,j+2] == self.grid.values[i-3,j+3] == 1):
                             self.state = 1
+                            self.stats[4] += 1
                             break
                         if (self.grid.values[i,j] == self.grid.values[i-1,j+1] == self.grid.values[i-2,j+2] == self.grid.values[i-3,j+3] == 2):
                             self.state = 2
@@ -73,6 +82,7 @@ class Game:
                     if (j>=3):
                         if (self.grid.values[i,j] == self.grid.values[i-1,j-1] == self.grid.values[i-2,j-2] == self.grid.values[i-3,j-3] == 1):
                             self.state = 1
+                            self.stats[4] += 1
                             break
                         if (self.grid.values[i,j] == self.grid.values[i-1,j-1] == self.grid.values[i-2,j-2] == self.grid.values[i-3,j-3] == 2):
                             self.state = 2
