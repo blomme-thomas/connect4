@@ -12,12 +12,15 @@ class Game:
         self.q = np.loadtxt("matrix.txt")
         #stats : nb_games | wins | winligne | wincolonne | windiagonale
         self.stats = np.loadtxt("stats.txt")
+        self.coups = np.zeros((2))
 
     def run(self):
         self.stats[0] += 1
         while(1):
             ia1 = ia.jouer(self, 1, self.q)
             qlearning.update_case(0.1,0.6,self.q,ia1[0],ia1[1])
+            arr = np.array([ia1[0],ia1[1]])
+            self.coups = np.vstack((self.coups,arr))
             
             if (self.check_state() == 1):
                 qlearning.update_case(1,0.6,self.q,ia1[0],ia1[1])
@@ -42,7 +45,6 @@ class Game:
 
             np.savetxt("matrix.txt", self.q)
         np.savetxt("stats.txt",self.stats)
-
             
             
             
