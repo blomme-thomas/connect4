@@ -12,28 +12,26 @@ class Game:
         self.q = np.loadtxt("matrix.txt")
         #stats : nb_games | wins | winligne | wincolonne | windiagonale
         self.stats = np.loadtxt("stats.txt")
-        self.coups = np.zeros((2))
+        self.coups = []
 
     def run(self):
         self.stats[0] += 1
         while(1):
             ia1 = ia.jouer(self, 1, self.q)
-            qlearning.update_case(0.1,0.6,self.q,ia1[0],ia1[1])
-            arr = np.array([ia1[0],ia1[1]])
-            self.coups = np.vstack((self.coups,arr))
+            self.coups.append((ia1[0],ia1[1]))
             
             if (self.check_state() == 1):
-                qlearning.update_case(1,0.6,self.q,ia1[0],ia1[1])
+                qlearning.update_chemin(10,0.9,self.q,self.coups)
                 print("player 1 win")
                 self.stats[1] += 1
                 np.savetxt("matrix.txt", self.q)
                 break
 
             c = self.coup_possible()
-            print(c)
             self.place_coin(random.choice(c),2)
             
             if (self.check_state() == 2):
+                qlearning.update_chemin(-1,0.9,self.q,self.coups)
                 print("player 2 win")
                 np.savetxt("matrix.txt", self.q)
                 break
@@ -93,7 +91,6 @@ class Game:
 
     def place_coin(self,column,player):
         while(1):
-            print(player)
             if (int(column)>6 or int(column)<0):
                 print("coup impossible")
                 continue

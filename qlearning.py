@@ -64,9 +64,10 @@ def update_case(r, f, grid, i, j):
     return
 
 def update_chemin(r, f, grid, l):
-    temp = grid.copy
+    temp = grid.copy()
     n, m = grid.shape
     for (i,j) in l:
+        max = grid[i, j]
         if i>0:
             if max<(r+f*grid[i-1,j]):
                 max = r+f*grid[i-1,j]
