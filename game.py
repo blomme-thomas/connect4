@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         self.grid = grid.Grid()
         self.state = 0        
-        self.q = np.loadtxt("matrix.txt")
+        self.q = np.genfromtxt("matrix.csv",delimiter=',')
         #stats : nb_games | wins | winligne | wincolonne | windiagonale
         self.stats = np.loadtxt("stats.txt")
         self.coups = []
@@ -24,7 +24,7 @@ class Game:
                 qlearning.update_chemin(10,0.9,self.q,self.coups)
                 print("player 1 win")
                 self.stats[1] += 1
-                np.savetxt("matrix.txt", self.q)
+                np.savetxt("matrix.csv", self.q, delimiter=",")
                 break
 
             c = self.coup_possible()
@@ -33,15 +33,15 @@ class Game:
             if (self.check_state() == 2):
                 qlearning.update_chemin(-1,0.9,self.q,self.coups)
                 print("player 2 win")
-                np.savetxt("matrix.txt", self.q)
+                np.savetxt("matrix.csv", self.q, delimiter=",")
                 break
 
             if (self.check_state() == 0):
                 print("Draw")
-                np.savetxt("matrix.txt", self.q)
+                np.savetxt("matrix.csv", self.q, delimiter=",")
                 break
 
-            np.savetxt("matrix.txt", self.q)
+            np.savetxt("matrix.csv", self.q, delimiter=",")
         np.savetxt("stats.txt",self.stats)
             
             
