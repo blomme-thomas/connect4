@@ -13,14 +13,12 @@ class Game:
         #stats : nb_games | wins | winligne | wincolonne | windiagonale
         self.stats = np.loadtxt("stats.txt")
         self.coups = []
-        self.adv = np.genfromtxt("matrix1.csv",delimiter=',')
 
     def run(self):
         self.stats[0] += 1
         while(1):
             ia1 = ia.jouer(self, 1, self.q)
             self.coups.append((ia1[0],ia1[1]))
-            qlearning.update_case(0.1,0.9,self.q,ia1[0],ia1[1])
             if (self.check_state() == 1):
                 qlearning.update_chemin(2,0.9,self.q,self.coups)
                 print("player 1 win")
@@ -28,9 +26,9 @@ class Game:
                 np.savetxt("matrix.csv", self.q, delimiter=",")
                 break
 
-            c = self.coup_possible()
-            self.place_coin(random.choice(c),2)
-            #ia2 = ia.jouer(self, 2, self.adv)
+            self.grid.display()
+            c = input()
+            self.place_coin(c,2)
             
             if (self.check_state() == 2):
                 qlearning.update_chemin(-1,0.9,self.q,self.coups)
